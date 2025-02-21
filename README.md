@@ -1,16 +1,16 @@
 # odoo_auto_install
 
-Installation of odoo 15.0 16.0 with virtual env on Ubuntu 22.04
+Installation of odoo 18.0 with virtual env on Ubuntu 24.04
 
 ## Features and Benefits
 
 1. Python virtual environment
-2. Odoo 15.0 16.0
-3. PostgreSQL 12 or 14
+2. Odoo 18.0
+3. PostgreSQL 12 or 16
 4. Multiple instances of Odoo same server
 5. ready made configuration file
 
-Simple configuration file to install odoo 15.0 16.0 with virtual env on Ubuntu 22.04
+Simple configuration file to install odoo 18.0 with virtual env on Ubuntu 24.04
 
 Setting:
 
@@ -27,7 +27,7 @@ INSTALL_WKHTMLTOPDF="True"
 OE_PORT="8069"
 # Choose the Odoo version which you want to install. For example: 16.0, 15.0, 14.0 or saas-22. When using 'master' the master version will be installed.
 # IMPORTANT! This script contains extra libraries that are specifically needed for Odoo 16.0
-OE_VERSION="16.0"
+OE_VERSION="18.0"
 # Set this to True if you want to install the Odoo enterprise version!
 IS_ENTERPRISE="False"
 # Installs postgreSQL V14 instead of defaults (e.g V12 for Ubuntu 20/22) - this improves performance
@@ -88,7 +88,7 @@ sub_dirs=(
 - Ubuntu 22.04
 - 2vCPU and 1GB RAM
 - 8GB Disk
-This script will work on Ubuntu 22.04, it uses PostgreSQL as database, so it is recommended to run it on a server with at least 1GB of memory. Swap is not required. It will install Odoo 15.0 16.0 with virtual env by default in the home directory of the system user that you specify.
+This script will work on Ubuntu 24.04, it uses PostgreSQL as database, so it is recommended to run it on a server with at least 1GB of memory. Swap is not required. It will install odoo 18.0 with virtual env by default in the home directory of the system user that you specify.
 
 ##### 2. Get the script and make it executable
 
