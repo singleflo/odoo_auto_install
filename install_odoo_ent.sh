@@ -190,6 +190,7 @@ sudo git clone --depth 1 --branch $OE_VERSION https://github.com/OCA/social $OE_
 sudo git clone --depth 1 --branch $OE_VERSION https://github.com/OCA/website $OE_HOME/custom/website
 sudo git clone --depth 1 --branch $OE_VERSION https://$GIT_USERNAME:$GIT_PASSWORD@github.com/crottolo/od_custom_app $OE_HOME/custom/od_custom_app
 sudo git clone --depth 1 --branch $OE_VERSION https://github.com/OCA/partner-contact $OE_HOME/custom/partner-contact
+sudo git clone --depth 1 --branch $OE_VERSION https://github.com/OCA/mail $OE_HOME/custom/mail
 
 # Definisci un array con tutte le sottodirectory che vuoi aggiungere
 sub_dirs=(
@@ -202,6 +203,7 @@ sub_dirs=(
   "${OE_HOME}/custom/website"
   "${OE_HOME}/custom/od_custom_app"
   "${OE_HOME}/custom/partner-contact"
+  "${OE_HOME}/custom/mail"
 )
 
 # Inizia a costruire la stringa con la directory che deve sempre essere inclusa
