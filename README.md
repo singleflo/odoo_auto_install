@@ -103,7 +103,7 @@ This script will work on Ubuntu 24.04, uses PostgreSQL as a database, so it's ad
 ```sh
 # Root user is required
 
-wget https://raw.githubusercontent.com/crottolo/odoo_auto_install/main/install_odoo_ent.sh
+wget https://raw.githubusercontent.com/crottolo/odoo_auto_install/refs/heads/18.0/install_odoo_ent.sh
 chmod +x install_odoo_ent.sh
 ./install_odoo_ent.sh
 ```
@@ -398,7 +398,7 @@ Questo script funzionerà su Ubuntu 24.04, utilizza PostgreSQL come database, qu
 ```sh
 # È richiesto l'utente root
 
-wget https://raw.githubusercontent.com/crottolo/odoo_auto_install/main/install_odoo_ent.sh
+wget https://raw.githubusercontent.com/crottolo/odoo_auto_install/refs/heads/18.0/install_odoo_ent.sh
 chmod +x install_odoo_ent.sh
 ./install_odoo_ent.sh
 ```
