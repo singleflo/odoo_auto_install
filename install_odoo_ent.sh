@@ -149,7 +149,7 @@ echo -e "\n---- Activate venv ----"
 source $OE_HOME/odoo-venv/bin/activate
 echo -e "\n---- Install python packages/requirements ----"
 sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install -r $OE_HOME_EXT/requirements.txt"
-sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install python-codicefiscale phonenumbers"
+sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install python-codicefiscale phonenumbers paramiko pdfminer.six fillpdf pdfplumber"
 echo -e "\n---- Deactivate venv ----"
 deactivate
 
@@ -174,7 +174,7 @@ if [ $IS_ENTERPRISE = "True" ]; then
 
     echo -e "\n---- Added Enterprise code under $OE_HOME/enterprise/addons ----"
     echo -e "\n---- Installing Enterprise specific libraries ----"
-    sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install num2words ofxparse dbfread ebaysdk firebase_admin pyOpenSSL paramiko"
+    sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install num2words ofxparse dbfread ebaysdk firebase_admin pyOpenSSL"
     deactivate
     sudo npm install -g less
     sudo npm install -g less-plugin-clean-css

@@ -1,4 +1,9 @@
-# odoo_auto_install
+# odoo_auto_install - Script di Installazione Automatica per Odoo
+
+## Compatibilità
+✅ **Ubuntu 24.04 LTS** - Completamente supportato e ottimizzato 
+✅ **Odoo 18.0** - Configurazione completa con tutte le dipendenze necessarie
+✅ **PostgreSQL 16** - Installazione e configurazione ottimizzata per prestazioni migliori
 
 Installazione di Odoo 18.0 con ambiente virtuale su Ubuntu 24.04
 
