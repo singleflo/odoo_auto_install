@@ -294,7 +294,7 @@ If you found this script useful, consider giving it a "like" on its GitHub repos
 Your support helps create more useful content. Thank you!
 
 ---
-# ENGLISH VERSION
+# VERSIONE ITALIANA
 # odoo_auto_install - Script di Installazione Automatica per Odoo
 
 ## Compatibilità
