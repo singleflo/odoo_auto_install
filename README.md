@@ -1,3 +1,300 @@
+# ENGLISH VERSION
+
+# odoo_auto_install - Automatic Installation Script for Odoo
+
+## Compatibility
+✅ **Ubuntu 24.04 LTS** - Fully supported and optimized 
+✅ **Odoo 18.0** - Complete configuration with all necessary dependencies
+✅ **PostgreSQL 16** - Optimized installation and configuration for better performance
+
+Installation of Odoo 18.0 with Python virtual environment on Ubuntu 24.04
+
+## Features and Benefits
+
+1. Python virtual environment
+2. Odoo 18.0
+3. PostgreSQL 16
+4. Ability to install multiple Odoo instances on the same server
+5. Pre-configured configuration file
+6. Support for Nginx and SSL with Certbot
+7. UFW firewall configuration
+
+Simple configuration to install Odoo 18.0 with a virtual environment on Ubuntu 24.04
+
+Main settings:
+
+```sh
+################################################################################
+
+OE_USER="odoo"
+OE_HOME="/$OE_USER"
+OE_HOME_EXT="/$OE_USER/${OE_USER}-server"
+# Default port where this Odoo instance will run
+INSTALL_WKHTMLTOPDF="True"
+OE_PORT="8069"
+# Odoo version to install
+OE_VERSION="18.0"
+# Set to True to install the Odoo Enterprise version
+IS_ENTERPRISE="False"
+# Install PostgreSQL V16 instead of the default version
+INSTALL_POSTGRESQL="True"
+INSTALL_POSTGRESQL_SIXTEEN="True"
+# Set to True to install Nginx
+INSTALL_NGINX="False"
+# Superadmin password - if GENERATE_RANDOM_PASSWORD is set to "True" a random password will be generated
+OE_SUPERADMIN="admin"
+GENERATE_RANDOM_PASSWORD="True"
+OE_CONFIG="${OE_USER}-server"
+# Default longpolling port
+LONGPOLLING_PORT="8072"
+# Set to "True" to install certbot and enable SSL
+ENABLE_SSL="False"
+# Website name if using Nginx
+WEBSITE_NAME="example.com"
+
+GIT_USERNAME="crottolo"
+GIT_PASSWORD="your-password-of-github"
+################################################################################
+```
+
+### Repository Configuration
+
+You can configure public and private GitHub repositories:
+
+```sh
+## Configure multiple GitHub repositories
+
+### Public and private repositories
+
+##### GIT_USERNAME is your GitHub username for private repositories
+##### GIT_PASSWORD is your GitHub password for private repositories
+
+# Example of cloning a private repository
+sudo git clone --depth 1 --branch 18.0 https://GIT_USERNAME:GIT_PASSWORD@github.com/crottolo/od_custom_app $OE_HOME/custom/od_custom_app
+
+# Addon paths configured in the script
+sub_dirs=(
+  "${OE_HOME}/custom/addons"
+  "${OE_HOME_EXT}/addons"
+  "${OE_HOME}/custom/free_addons"
+  "${OE_HOME}/custom/design-themes"
+  "${OE_HOME}/custom/web"
+  "${OE_HOME}/custom/social"
+  "${OE_HOME}/custom/website"
+  "${OE_HOME}/custom/od_custom_app"
+  "${OE_HOME}/custom/partner-contact"
+)
+```
+
+---
+
+## Installation
+
+### 1. Requirements
+
+- Ubuntu 24.04
+- 2vCPU and 1GB RAM (minimum)
+- 8GB disk space
+
+This script will work on Ubuntu 24.04, uses PostgreSQL as a database, so it's advisable to run it on a server with at least 1GB of memory. No swap is required. It will install Odoo 18.0 with a Python virtual environment in the home directory of the specified system user.
+
+### 2. Get the script and make it executable
+
+```sh
+# Root user is required
+
+wget https://raw.githubusercontent.com/crottolo/odoo_auto_install/main/install_odoo_ent.sh
+chmod +x install_odoo_ent.sh
+./install_odoo_ent.sh
+```
+
+When the installation is complete, you will see the following message:
+
+```sh
+-----------------------------------------------------------
+Done! The Odoo server is up and running. Specifications:
+Port: 8069
+User service: odoo
+Configuration file location: /etc/odoo-server.conf
+Logfile location: /var/log/odoo
+User PostgreSQL: odoo
+Code location: /odoo
+Addons folder: odoo/odoo-server/addons/
+Password superadmin (database): dwer324fsdgdfgdg
+Start Odoo service: sudo systemctl start odoo.service
+Stop Odoo service: sudo systemctl stop odoo.service
+Restart Odoo service: sudo systemctl restart odoo.service
+-----------------------------------------------------------
+```
+
+During the process, a user with sudo privileges is created, e.g., odoo, and the configuration is separate from the root user.
+
+### 3. Python Virtual Environment
+
+To view the list of packages installed in the virtual environment:
+
+```sh
+sudo su - odoo
+source /odoo/odoo-venv/bin/activate
+pip list
+
+# To install a new package
+pip install "package-name-to-install"
+
+deactivate
+```
+
+#### Example
+
+```sh
+root@odoo_server:~# sudo su odoo
+odoo@odoo_server:/root$ cd
+odoo@odoo_server:~$ ls
+custom  odoo-server  odoo-venv
+odoo@odoo_server:~$ source odoo-venv/bin/activate
+(odoo-venv) odoo@odoo_server:~$ pip install pandas
+Collecting pandas
+  Downloading pandas-2.1.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (12.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.3/12.3 MB 47.6 MB/s eta 0:00:00
+Requirement already satisfied: pytz>=2020.1 in ./odoo-venv/lib/python3.10/site-packages (from pandas) (2023.3.post1)
+Collecting tzdata>=2022.1
+  Downloading tzdata-2023.3-py2.py3-none-any.whl (341 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 341.8/341.8 KB 125.2 MB/s eta 0:00:00
+Collecting numpy>=1.22.4
+  Downloading numpy-1.26.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (18.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 18.2/18.2 MB 54.6 MB/s eta 0:00:00
+Collecting python-dateutil>=2.8.2
+  Downloading python_dateutil-2.8.2-py2.py3-none-any.whl (247 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 247.7/247.7 KB 109.6 MB/s eta 0:00:00
+Requirement already satisfied: six>=1.5 in ./odoo-venv/lib/python3.10/site-packages (from python-dateutil>=2.8.2->pandas) (1.16.0)
+Installing collected packages: tzdata, python-dateutil, numpy, pandas
+  Attempting uninstall: python-dateutil
+    Found existing installation: python-dateutil 2.8.1
+    Uninstalling python-dateutil-2.8.1:
+      Successfully uninstalled python-dateutil-2.8.1
+Successfully installed numpy-1.26.0 pandas-2.1.1 python-dateutil-2.8.2 tzdata-2023.3
+(odoo-venv) odoo@odoo_server:~$ deactivate 
+odoo@odoo_server:~$ 
+```
+
+It's important to activate the virtual environment before installing packages and then deactivate it.
+You can see the confirmation of the virtual environment activation in the prompt:
+***(odoo-venv) odoo@odoo_server:*** pip install pandas
+and the deactivation in the prompt:
+***(odoo@odoo_server:~$)***
+
+After installing the package, you can deactivate the virtual environment:
+
+```sh
+(odoo-venv) odoo@odoo_server:~$ deactivate
+odoo@odoo_server:~$ 
+```
+
+### 4. Verify the server's IP address
+
+```sh
+curl ifconfig.me
+```
+
+### 5. Create a database at the server's IP address
+
+```sh
+http://ip-address:8069/web/database/manager
+```
+
+### 6. Nginx Configuration
+
+The script supports automatic installation and configuration of Nginx. If you set `INSTALL_NGINX="True"`, the Nginx web server will be installed and configured to work with Odoo.
+
+If you also set `ENABLE_SSL="True"` and provide a valid domain name in `WEBSITE_NAME`, Certbot will be installed to automatically configure SSL/HTTPS.
+
+#### Manual Configuration of Nginx Proxy Manager
+
+If you prefer to use Nginx Proxy Manager on a separate server, here are some recommended configurations:
+
+***Forward hostname / ip:*** internal server IP address
+
+***Forward port:*** 8069
+
+***Websockets Support:*** true
+
+#### Configuration for Odoo 18.0
+
+***Custom locations: "/"***
+
+```sh
+proxy_read_timeout 720s;
+proxy_connect_timeout 720s;
+proxy_send_timeout 720s;
+# Add Headers for odoo proxy mode
+proxy_set_header X-Forwarded-Host $host;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_redirect off;
+```
+
+***Custom locations: "/websocket"***
+
+```sh
+proxy_read_timeout 720s;
+proxy_connect_timeout 720s;
+proxy_send_timeout 720s;
+# Add Headers for odoo proxy mode
+proxy_set_header X-Forwarded-Host $host;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+proxy_set_header X-Real-IP $remote_addr;
+```
+
+***Advanced: "Custom nginx configuration"***
+
+```sh
+# common gzip
+gzip_types text/css text/less text/plain text/xml application/xml application/json application/javascript;
+gzip on;
+client_body_in_file_only clean;
+client_body_buffer_size 32K;
+client_max_body_size 500M;
+sendfile on;
+send_timeout 600s;
+keepalive_timeout 300;
+```
+
+### 7. Additional Font Installation
+
+To improve PDF generation with wkhtmltopdf, you can install additional fonts:
+
+```sh
+apt install ttf-mscorefonts-installer
+wget -q -O - https://gist.githubusercontent.com/Blastoise/b74e06f739610c4a867cf94b27637a56/raw/96926e732a38d3da860624114990121d71c08ea1/tahoma.sh | bash
+wget https://gist.githubusercontent.com/maxwelleite/913b6775e4e408daa904566eb375b090/raw/ttf-ms-tahoma-installer.sh -q -O - | sudo bash
+```
+
+### 8. New Features in Version 18.0
+
+The updated script for Odoo 18.0 includes several improvements:
+
+1. **Support for Ubuntu 24.04** - Optimized for the latest LTS version of Ubuntu
+2. **PostgreSQL 16** - Support for the latest version of PostgreSQL
+3. **Systemd instead of init.d** - Use of the modern service management system
+4. **UFW Configuration** - Automatic firewall configuration
+5. **Dependency Simplification** - No longer necessary to force specific versions of pyopenssl and cryptography
+6. **Configuration Improvements** - More complete and optimized configuration file
+
+### 9. Conclusion
+
+You have successfully installed Odoo 18.0 with a Python virtual environment on Ubuntu 24.04. This configuration allows you to run multiple instances on the same server and offers a ready-to-use configuration for rapid deployment.
+
+If you found this script useful, consider giving it a "like" on its GitHub repository. For more content like this, subscribe and "like" the CrottoCode YouTube channel.
+
+- **GitHub Repository**: [odoo_auto_install](https://github.com/crottolo/odoo_auto_install)
+- **YouTube Channel**: [CrottoCode](https://youtube.com/@CrottoCode?si=JQqVblSkvNBBdC5S)
+
+Your support helps create more useful content. Thank you!
+
+---
+# ENGLISH VERSION
 # odoo_auto_install - Script di Installazione Automatica per Odoo
 
 ## Compatibilità
@@ -290,3 +587,5 @@ Se hai trovato utile questo script, considera di dargli un "like" sul suo reposi
 - **Canale YouTube**: [CrottoCode](https://youtube.com/@CrottoCode?si=JQqVblSkvNBBdC5S)
 
 Il tuo supporto aiuta a creare altri contenuti utili. Grazie!
+
+
