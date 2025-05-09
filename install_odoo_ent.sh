@@ -105,9 +105,14 @@ echo -e "\n---- Installing xfonts for wkhtmltopdf... ----"
 sudo apt -y install xfonts-75dpi xfonts-encodings xfonts-utils xfonts-base fontconfig
 
 echo -e "\n---- Installing additional fonts... ----"
+# Pre-accept EULA for Microsoft fonts
+echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
+# Install MS fonts with auto-accepted EULA
 sudo apt install ttf-mscorefonts-installer -y
-wget -q -O - https://gist.githubusercontent.com/Blastoise/b74e06f739610c4a867cf94b27637a56/raw/96926e732a38d3da860624114990121d71c08ea1/tahoma.sh | bash
-wget https://gist.githubusercontent.com/maxwelleite/913b6775e4e408daa904566eb375b090/raw/ttf-ms-tahoma-installer.sh -q -O - | sudo bash
+# Download and execute Tahoma font script with automatic yes to prompts
+yes | wget -q -O - https://gist.githubusercontent.com/Blastoise/b74e06f739610c4a867cf94b27637a56/raw/96926e732a38d3da860624114990121d71c08ea1/tahoma.sh | bash
+# Download and execute MS Tahoma installer script with automatic yes to prompts
+yes | wget https://gist.githubusercontent.com/maxwelleite/913b6775e4e408daa904566eb375b090/raw/ttf-ms-tahoma-installer.sh -q -O - | sudo bash
 
 echo -e "\n---- Installing nodeJS NPM and rtlcss for LTR support ----"
 sudo apt install nodejs npm -y
