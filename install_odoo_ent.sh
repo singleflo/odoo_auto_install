@@ -95,7 +95,7 @@ sudo su - postgres -c "createuser -s $OE_USER" 2> /dev/null || true
 echo -e "\n---- Installing required packages... ----"
 sudo apt install -y git wget python3-minimal python3-dev python3-pip python3-wheel libxml2-dev libxslt1-dev zlib1g-dev libsasl2-dev libldap2-dev build-essential \
 libssl-dev libffi-dev libmysqlclient-dev libjpeg-dev libpq-dev libjpeg8-dev liblcms2-dev libblas-dev libatlas-base-dev libzip-dev python3-setuptools node-less \
-python3-venv python3-cffi gdebi zlib1g-dev curl cython3 python3-openssl
+python3-venv python3-cffi gdebi zlib1g-dev curl cython3 python3-openssl pkg-config libcairo2-dev
 
 sudo pip3 install --upgrade pip --break-system-packages
 sudo pip3 install setuptools wheel --break-system-packages
@@ -154,7 +154,7 @@ echo -e "\n---- Activate venv ----"
 source $OE_HOME/odoo-venv/bin/activate
 echo -e "\n---- Install python packages/requirements ----"
 sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install -r $OE_HOME_EXT/requirements.txt"
-sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install python-codicefiscale phonenumbers paramiko pdfminer.six fillpdf pdfplumber"
+sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install python-codicefiscale phonenumbers paramiko pdfminer.six fillpdf pdfplumber rlPyCairo"
 echo -e "\n---- Deactivate venv ----"
 deactivate
 
