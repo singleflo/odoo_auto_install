@@ -53,7 +53,7 @@ GIT_PASSWORD="you-password-of-github"
 echo -e "\n---- Update Server ----"
 # universe package is for Ubuntu 18.x
 #sudo add-apt-repository universe
-sudo apt update 
+sudo apt update
 sudo apt upgrade -y
 sudo apt autoremove -y
 
@@ -83,7 +83,7 @@ else
 fi
 
 echo -e "\n---- Starting PostgreSQL service... ----"
-sudo systemctl start postgresql 
+sudo systemctl start postgresql
 sudo systemctl enable postgresql
 
 echo -e "\n---- Creating the ODOO PostgreSQL User  ----"
@@ -125,7 +125,7 @@ sudo npm install -g rtlcss
 #--------------------------------------------------
 if [ $INSTALL_WKHTMLTOPDF = "True" ]; then
   echo -e "\n---- Install wkhtmltopdf and place shortcuts on correct place for ODOO 18 ----"
-  sudo wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.jammy_amd64.deb 
+  sudo wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.jammy_amd64.deb
   sudo apt install ./wkhtmltox_0.12.6.1-2.jammy_amd64.deb
   sudo cp /usr/local/bin/wkhtmltoimage /usr/bin/wkhtmltoimage
   sudo cp /usr/local/bin/wkhtmltopdf /usr/bin/wkhtmltopdf
@@ -307,7 +307,7 @@ if [ $INSTALL_NGINX = "True" ]; then
   echo "==== Installing nginx ... ===="
   sudo apt install -y nginx
   sudo systemctl enable nginx
-  
+
   echo "==== Configuring nginx ... ===="
   cat <<EOF > /etc/nginx/sites-available/$OE_USER
 # odoo server
@@ -341,7 +341,7 @@ server {
    proxy_read_timeout 720s;
    proxy_connect_timeout 720s;
    proxy_send_timeout 720s;
-  
+
    # Add Headers for odoo proxy mode
    proxy_set_header Host \$host;
    proxy_set_header X-Forwarded-Host \$host;
@@ -379,7 +379,7 @@ EOF
   sudo ln -s /etc/nginx/sites-available/$OE_USER /etc/nginx/sites-enabled/$OE_USER
   sudo rm /etc/nginx/sites-enabled/default
   sudo rm /etc/nginx/sites-available/default
-  
+
   sudo systemctl reload nginx
   echo "Done! The Nginx server is up and running. Configuration can be found at /etc/nginx/sites-available/$OE_USER"
 
@@ -393,8 +393,8 @@ EOF
     sudo snap refresh core
     sudo snap install --classic certbot
     sudo ln -s /snap/bin/certbot /usr/bin/certbot
-    sudo certbot --nginx -d $WEBSITE_NAME 
-    sudo systemctl reload nginx  
+    sudo certbot --nginx -d $WEBSITE_NAME
+    sudo systemctl reload nginx
     echo "============ SSL/HTTPS is enabled! ==========="
   else
     echo "==== SSL/HTTPS isn't enabled due to choice of the user or because of a misconfiguration! ======"
@@ -407,7 +407,7 @@ fi
 # UFW Firewall
 #--------------------------------------------------
 echo "=== Installation of UFW firewall ... ==="
-sudo apt install -y ufw 
+sudo apt install -y ufw
 
 if [ $INSTALL_NGINX = "True" ]; then
   sudo ufw allow 'Nginx Full'

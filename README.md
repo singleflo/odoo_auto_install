@@ -587,5 +587,3 @@ Se hai trovato utile questo script, considera di dargli un "like" sul suo reposi
 - **Canale YouTube**: [CrottoCode](https://youtube.com/@CrottoCode?si=JQqVblSkvNBBdC5S)
 
 Il tuo supporto aiuta a creare altri contenuti utili. Grazie!
-
-
