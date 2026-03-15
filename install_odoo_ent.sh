@@ -97,8 +97,8 @@ sudo apt install -y git wget python3-minimal python3-dev python3-pip python3-whe
 libssl-dev libffi-dev libmysqlclient-dev libjpeg-dev libpq-dev libjpeg8-dev liblcms2-dev libblas-dev libatlas-base-dev libzip-dev python3-setuptools node-less \
 python3-venv python3-cffi gdebi zlib1g-dev curl cython3 python3-openssl pkg-config libcairo2-dev
 
-sudo pip3 install --upgrade pip --break-system-packages
-sudo pip3 install setuptools wheel --break-system-packages
+# NOTE: Do NOT upgrade system pip on Ubuntu 24.04 (managed by apt, RECORD file missing).
+# pip/setuptools/wheel are installed fresh inside the Odoo venv (see below).
 
 # Installing xfonts dependencies for wkhtmltopdf
 echo -e "\n---- Installing xfonts for wkhtmltopdf... ----"
@@ -154,7 +154,7 @@ echo -e "\n---- Activate venv ----"
 source $OE_HOME/odoo-venv/bin/activate
 echo -e "\n---- Install python packages/requirements ----"
 sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install -r $OE_HOME_EXT/requirements.txt"
-sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install python-codicefiscale phonenumbers paramiko pdfminer.six fillpdf pdfplumber rlPyCairo"
+sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install python-codicefiscale phonenumbers paramiko pdfminer.six fillpdf pdfplumber rlPyCairo evolutionapi"
 echo -e "\n---- Deactivate venv ----"
 deactivate
 
