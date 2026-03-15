@@ -36,7 +36,7 @@ ENABLE_SSL="False"
 # Set the website name if using Nginx
 WEBSITE_NAME="example.com"
 
-GIT_USERNAME="crottolo"
+GIT_USERNAME="singleflo"
 GIT_PASSWORD="you-password-of-github"
 
 ################################################################################
@@ -193,12 +193,12 @@ echo -e "\n---- Setting permissions on home folder ----"
 sudo chown -R $OE_USER:$OE_USER $OE_HOME/*
 
 # Clona i repository necessari
-sudo git clone --depth 1 --branch $OE_VERSION https://github.com/crottolo/free_addons $OE_HOME/custom/free_addons
+sudo git clone --depth 1 --branch $OE_VERSION https://github.com/singleflo/free_addons $OE_HOME/custom/free_addons
 sudo git clone --depth 1 --branch $OE_VERSION https://github.com/odoo/design-themes $OE_HOME/custom/design-themes
 sudo git clone --depth 1 --branch $OE_VERSION https://github.com/OCA/web $OE_HOME/custom/web
 sudo git clone --depth 1 --branch $OE_VERSION https://github.com/OCA/social $OE_HOME/custom/social
 sudo git clone --depth 1 --branch $OE_VERSION https://github.com/OCA/website $OE_HOME/custom/website
-sudo git clone --depth 1 --branch $OE_VERSION https://$GIT_USERNAME:$GIT_PASSWORD@github.com/crottolo/od_custom_app $OE_HOME/custom/od_custom_app
+sudo git clone --depth 1 --branch $OE_VERSION https://$GIT_USERNAME:$GIT_PASSWORD@github.com/singleflo/od_custom_app $OE_HOME/custom/od_custom_app
 sudo git clone --depth 1 --branch $OE_VERSION https://github.com/OCA/partner-contact $OE_HOME/custom/partner-contact
 sudo git clone --depth 1 --branch $OE_VERSION https://github.com/OCA/mail $OE_HOME/custom/mail
 
