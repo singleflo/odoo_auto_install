@@ -36,7 +36,7 @@ ENABLE_SSL="False"
 # Set the website name if using Nginx
 WEBSITE_NAME="example.com"
 
-GIT_USERNAME="singleflo"
+GIT_USERNAME="crottolo"
 GIT_PASSWORD="you-password-of-github"
 
 ################################################################################
