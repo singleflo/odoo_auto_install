@@ -202,7 +202,7 @@ sudo chown -R $OE_USER:$OE_USER $OE_HOME/*
 # ----------------------------------------------------------------------------
 REPOS=(
   # --- Public OCA + community ---
-  "free_addons|https://github.com/singleflo/free_addons"
+  "free_addons_odoo|https://github.com/singleflo/free_addons_odoo"
   "design-themes|https://github.com/odoo/design-themes"
   "web|https://github.com/OCA/web"
   "social|https://github.com/OCA/social"

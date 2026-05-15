@@ -73,7 +73,7 @@ The script uses a **single `REPOS` array** as the source of truth for all reposi
 
 REPOS=(
   # --- Public OCA + community ---
-  "free_addons|https://github.com/singleflo/free_addons"
+  "free_addons_odoo|https://github.com/singleflo/free_addons_odoo"
   "design-themes|https://github.com/odoo/design-themes"
   "web|https://github.com/OCA/web"
   "social|https://github.com/OCA/social"
@@ -383,7 +383,7 @@ Lo script usa un **unico array `REPOS`** come single source of truth per tutte l
 
 REPOS=(
   # --- Public OCA + community ---
-  "free_addons|https://github.com/singleflo/free_addons"
+  "free_addons_odoo|https://github.com/singleflo/free_addons_odoo"
   "design-themes|https://github.com/odoo/design-themes"
   "web|https://github.com/OCA/web"
   "social|https://github.com/OCA/social"
