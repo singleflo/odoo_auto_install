@@ -192,45 +192,51 @@ sudo su $OE_USER -c "mkdir $OE_HOME/custom/addons"
 echo -e "\n---- Setting permissions on home folder ----"
 sudo chown -R $OE_USER:$OE_USER $OE_HOME/*
 
-# Clona i repository necessari
-sudo git clone --depth 1 --branch $OE_VERSION https://github.com/singleflo/free_addons $OE_HOME/custom/free_addons
-sudo git clone --depth 1 --branch $OE_VERSION https://github.com/odoo/design-themes $OE_HOME/custom/design-themes
-sudo git clone --depth 1 --branch $OE_VERSION https://github.com/OCA/web $OE_HOME/custom/web
-sudo git clone --depth 1 --branch $OE_VERSION https://github.com/OCA/social $OE_HOME/custom/social
-sudo git clone --depth 1 --branch $OE_VERSION https://github.com/OCA/website $OE_HOME/custom/website
-sudo git clone --depth 1 --branch $OE_VERSION https://$GIT_USERNAME:$GIT_PASSWORD@github.com/singleflo/od_custom_app $OE_HOME/custom/od_custom_app
-sudo git clone --depth 1 --branch $OE_VERSION https://github.com/OCA/partner-contact $OE_HOME/custom/partner-contact
-sudo git clone --depth 1 --branch $OE_VERSION https://github.com/OCA/mail $OE_HOME/custom/mail
-
-# Definisci un array con tutte le sottodirectory che vuoi aggiungere
-sub_dirs=(
-  "${OE_HOME}/custom/addons"
-  "${OE_HOME_EXT}/addons"
-  "${OE_HOME}/custom/free_addons"
-  "${OE_HOME}/custom/design-themes"
-  "${OE_HOME}/custom/web"
-  "${OE_HOME}/custom/social"
-  "${OE_HOME}/custom/website"
-  "${OE_HOME}/custom/od_custom_app"
-  "${OE_HOME}/custom/partner-contact"
-  "${OE_HOME}/custom/mail"
+# ============================================================================
+# REPOSITORY CONFIGURATION
+# ============================================================================
+# Formato: "nome_locale|url_repo"
+# Per aggiungere una repo basta inserire UNA riga qui sotto: il loop sotto
+# si occupa sia del clone in $OE_HOME/custom/<nome> sia dell'inserimento
+# automatico nell'addons_path del conf file.
+# ----------------------------------------------------------------------------
+REPOS=(
+  # --- Public OCA + community ---
+  "free_addons|https://github.com/singleflo/free_addons"
+  "design-themes|https://github.com/odoo/design-themes"
+  "web|https://github.com/OCA/web"
+  "social|https://github.com/OCA/social"
+  "website|https://github.com/OCA/website"
+  "partner-contact|https://github.com/OCA/partner-contact"
+  "mail|https://github.com/OCA/mail"
+  # --- Singleflo platform baseline (PRIVATE: richiede GIT_USERNAME:GIT_PASSWORD) ---
+  "commons_odoo|https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/singleflo/commons_odoo"
+  "web_widgets_odoo|https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/singleflo/web_widgets_odoo"
+  "crm_odoo|https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/singleflo/crm_odoo"
+  "finance_odoo|https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/singleflo/finance_odoo"
 )
 
-# Inizia a costruire la stringa con la directory che deve sempre essere inclusa
-addons_path="addons_path=${OE_HOME_EXT}/addons,"
-
-# Se IS_ENTERPRISE è True, aggiungi la directory enterprise
+# Costruisci sub_dirs con le path base + clona ogni repo + accoda la sua path
+sub_dirs=(
+  "${OE_HOME_EXT}/addons"
+  "${OE_HOME}/custom/addons"
+)
 if [ "$IS_ENTERPRISE" = "True" ]; then
-  addons_path+="\n\t${OE_HOME}/enterprise/addons,"
+  sub_dirs+=("${OE_HOME}/enterprise/addons")
 fi
 
-# Aggiungi ogni sottodirectory all'addons_path
-for dir in "${sub_dirs[@]}"; do
-  addons_path+="\n\t${dir},"
+for entry in "${REPOS[@]}"; do
+  name="${entry%%|*}"
+  url="${entry#*|}"
+  sudo git clone --depth 1 --branch "$OE_VERSION" "$url" "$OE_HOME/custom/$name"
+  sub_dirs+=("${OE_HOME}/custom/${name}")
 done
 
-# Rimuovi l'ultima virgola
-addons_path=${addons_path%,}
+# Costruisci la stringa addons_path da sub_dirs (single source of truth)
+addons_path="addons_path=${sub_dirs[0]}"
+for dir in "${sub_dirs[@]:1}"; do
+  addons_path+=",\n\t${dir}"
+done
 
 echo -e "* Create server config file"
 sudo touch /etc/${OE_CONFIG}.conf

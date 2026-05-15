@@ -59,32 +59,47 @@ GIT_PASSWORD="your-password-of-github"
 
 ### Repository Configuration
 
-You can configure public and private GitHub repositories:
+The script uses a **single `REPOS` array** as the source of truth for all repositories. Each entry has the format `"name|url"` and is automatically:
+1. Cloned into `$OE_HOME/custom/<name>`
+2. Appended to the `addons_path` in the Odoo config file
 
 ```sh
-## Configure multiple GitHub repositories
+## Configure GitHub repositories (single source of truth)
 
 ### Public and private repositories
 
 ##### GIT_USERNAME is your GitHub username for private repositories
-##### GIT_PASSWORD is your GitHub password for private repositories
+##### GIT_PASSWORD is your GitHub Personal Access Token for private repositories
 
-# Example of cloning a private repository
-sudo git clone --depth 1 --branch 18.0 https://GIT_USERNAME:GIT_PASSWORD@github.com/crottolo/od_custom_app $OE_HOME/custom/od_custom_app
-
-# Addon paths configured in the script
-sub_dirs=(
-  "${OE_HOME}/custom/addons"
-  "${OE_HOME_EXT}/addons"
-  "${OE_HOME}/custom/free_addons"
-  "${OE_HOME}/custom/design-themes"
-  "${OE_HOME}/custom/web"
-  "${OE_HOME}/custom/social"
-  "${OE_HOME}/custom/website"
-  "${OE_HOME}/custom/od_custom_app"
-  "${OE_HOME}/custom/partner-contact"
+REPOS=(
+  # --- Public OCA + community ---
+  "free_addons|https://github.com/singleflo/free_addons"
+  "design-themes|https://github.com/odoo/design-themes"
+  "web|https://github.com/OCA/web"
+  "social|https://github.com/OCA/social"
+  "website|https://github.com/OCA/website"
+  "partner-contact|https://github.com/OCA/partner-contact"
+  "mail|https://github.com/OCA/mail"
+  # --- Singleflo platform baseline (PRIVATE) ---
+  "commons_odoo|https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/singleflo/commons_odoo"
+  "web_widgets_odoo|https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/singleflo/web_widgets_odoo"
+  "crm_odoo|https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/singleflo/crm_odoo"
+  "finance_odoo|https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/singleflo/finance_odoo"
 )
 ```
+
+#### Singleflo Platform Repositories
+
+The 4 `*_odoo` private repos provide the cross-cutting baseline for any Singleflo Odoo 18 instance:
+
+| Repository | Content |
+|---|---|
+| `commons_odoo` | Shared utilities: fiscalcode_calc, partner_docs, docx_report, privacy_consent, lead_counter_lost, hr_employee_firstname, appointment_link_custom, mail_plugin_fix, product_cost_security, api_doc |
+| `web_widgets_odoo` | UI widgets: web_domain_field, web_widget_image_dragdrop, web_ribbon_env, web_timer_widget, whatsapp_phone_widget, responsive_client, recording_audio_widget |
+| `crm_odoo` | Lead/contact integrations: api_crm_lead, multi_mail_sales_team, fb_odoo_lead, google_contact_integration |
+| `finance_odoo` | Italian fiscal, billing, payroll: l10n_it_edi_preview_xml, preinvoice_base, sale_installment, payroll_paghe, product_catalog_generator_app |
+
+> **Note**: customer-specific repos (e.g. `apple3_odoo`, `craftusa_odoo`, `pacini_odoo`, `hetica_odoo`, `dlike_odoo`, `aiutotelefoni_odoo`, `tassisto_odoo`) and the `dashboards_odoo` (licensed KS Dashboard Ninja) are **NOT** in the default install — clone them manually on instances that need them.
 
 ---
 
@@ -354,32 +369,47 @@ GIT_PASSWORD="your-password-of-github"
 
 ### Configurazione dei repository
 
-È possibile configurare repository GitHub pubblici e privati:
+Lo script usa un **unico array `REPOS`** come single source of truth per tutte le repo. Ogni voce ha formato `"nome|url"` e viene automaticamente:
+1. Clonata in `$OE_HOME/custom/<nome>`
+2. Aggiunta all'`addons_path` del file di configurazione Odoo
 
 ```sh
-## Configurazione di più repository GitHub
+## Configurazione repository GitHub (single source of truth)
 
 ### Repository pubblici e privati
 
 ##### GIT_USERNAME è il tuo nome utente GitHub per repository privati
-##### GIT_PASSWORD è la tua password GitHub per repository privati
+##### GIT_PASSWORD è il tuo GitHub Personal Access Token per repository privati
 
-# Esempio di clonazione di un repository privato
-sudo git clone --depth 1 --branch 18.0 https://GIT_USERNAME:GIT_PASSWORD@github.com/crottolo/od_custom_app $OE_HOME/custom/od_custom_app
-
-# Percorsi degli addons configurati nello script
-sub_dirs=(
-  "${OE_HOME}/custom/addons"
-  "${OE_HOME_EXT}/addons"
-  "${OE_HOME}/custom/free_addons"
-  "${OE_HOME}/custom/design-themes"
-  "${OE_HOME}/custom/web"
-  "${OE_HOME}/custom/social"
-  "${OE_HOME}/custom/website"
-  "${OE_HOME}/custom/od_custom_app"
-  "${OE_HOME}/custom/partner-contact"
+REPOS=(
+  # --- Public OCA + community ---
+  "free_addons|https://github.com/singleflo/free_addons"
+  "design-themes|https://github.com/odoo/design-themes"
+  "web|https://github.com/OCA/web"
+  "social|https://github.com/OCA/social"
+  "website|https://github.com/OCA/website"
+  "partner-contact|https://github.com/OCA/partner-contact"
+  "mail|https://github.com/OCA/mail"
+  # --- Singleflo platform baseline (PRIVATE) ---
+  "commons_odoo|https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/singleflo/commons_odoo"
+  "web_widgets_odoo|https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/singleflo/web_widgets_odoo"
+  "crm_odoo|https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/singleflo/crm_odoo"
+  "finance_odoo|https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/singleflo/finance_odoo"
 )
 ```
+
+#### Repository platform Singleflo
+
+I 4 `*_odoo` privati forniscono la baseline trasversale per qualsiasi istanza Odoo 18 Singleflo:
+
+| Repository | Contenuto |
+|---|---|
+| `commons_odoo` | Utility condivise: fiscalcode_calc, partner_docs, docx_report, privacy_consent, lead_counter_lost, hr_employee_firstname, appointment_link_custom, mail_plugin_fix, product_cost_security, api_doc |
+| `web_widgets_odoo` | Widget UI: web_domain_field, web_widget_image_dragdrop, web_ribbon_env, web_timer_widget, whatsapp_phone_widget, responsive_client, recording_audio_widget |
+| `crm_odoo` | Integrazioni lead/contatti: api_crm_lead, multi_mail_sales_team, fb_odoo_lead, google_contact_integration |
+| `finance_odoo` | Fiscale IT, fatturazione, paghe: l10n_it_edi_preview_xml, preinvoice_base, sale_installment, payroll_paghe, product_catalog_generator_app |
+
+> **Nota**: le repo customer-specifiche (es. `apple3_odoo`, `craftusa_odoo`, `pacini_odoo`, `hetica_odoo`, `dlike_odoo`, `aiutotelefoni_odoo`, `tassisto_odoo`) e `dashboards_odoo` (KS Dashboard Ninja con licenza a pagamento) **NON** sono nell'installazione di default — vanno clonate manualmente nelle istanze che le richiedono.
 
 ---
 
