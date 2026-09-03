@@ -155,6 +155,11 @@ source $OE_HOME/odoo-venv/bin/activate
 echo -e "\n---- Install python packages/requirements ----"
 sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install -r $OE_HOME_EXT/requirements.txt"
 sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install python-codicefiscale phonenumbers paramiko pdfminer.six fillpdf pdfplumber rlPyCairo evolutionapi"
+
+# --- Object storage S3 (installato di default; l'ATTIVAZIONE e' solo configurazione:
+# sezione [fs_storage.<code>] nel conf via server_environment, credenziali OVH, Autovacuum GC.
+# Versioni pinnate: aiobotocore impone botocore<1.43.57 -> boto3/botocore allineati. ---
+sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install 'fsspec[s3]>=2025.3.0' fsspec==2026.7.0 s3fs==2026.7.0 aiobotocore==3.9.0 boto3==1.43.56 botocore==1.43.56 python-slugify==8.0.4"
 echo -e "\n---- Deactivate venv ----"
 deactivate
 
@@ -209,6 +214,9 @@ REPOS=(
   "website|https://github.com/OCA/website"
   "partner-contact|https://github.com/OCA/partner-contact"
   "mail|https://github.com/OCA/mail"
+  # --- Object storage S3 (installato di default; si ATTIVA solo via conf [fs_storage] ---
+  "storage-backend|https://github.com/OCA/storage-backend"
+  "server-env|https://github.com/OCA/server-env"
   # --- Singleflo platform baseline (PRIVATE: richiede GIT_USERNAME:GIT_PASSWORD) ---
   "commons_odoo|https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/singleflo/commons_odoo"
   "web_widgets_odoo|https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/singleflo/web_widgets_odoo"
