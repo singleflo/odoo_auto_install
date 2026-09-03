@@ -159,7 +159,7 @@ sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 in
 # --- Object storage S3 (installato di default; l'ATTIVAZIONE e' solo configurazione:
 # sezione [fs_storage.<code>] nel conf via server_environment, credenziali OVH, Autovacuum GC.
 # Versioni pinnate: aiobotocore impone botocore<1.43.57 -> boto3/botocore allineati. ---
-sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install 'fsspec[s3]>=2025.3.0' fsspec==2026.7.0 s3fs==2026.7.0 aiobotocore==3.9.0 boto3==1.43.56 botocore==1.43.56 python-slugify==8.0.4"
+sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install packaging==24.2 'fsspec[s3]>=2025.3.0' fsspec==2026.7.0 s3fs==2026.7.0 aiobotocore==3.9.0 boto3==1.43.56 botocore==1.43.56 python-slugify==8.0.4"
 echo -e "\n---- Deactivate venv ----"
 deactivate
 
