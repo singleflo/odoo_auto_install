@@ -221,7 +221,7 @@ REPOS=(
   "partner-contact|https://github.com/OCA/partner-contact"
   "mail|https://github.com/OCA/mail"
   # --- Object storage S3 (installato di default; si ATTIVA solo via conf [fs_storage] ---
-  "storage-backend|https://github.com/OCA/storage-backend"
+  "storage|https://github.com/OCA/storage"
   "server-env|https://github.com/OCA/server-env"
   # --- Singleflo platform baseline (PRIVATE: richiede GIT_USERNAME:GIT_PASSWORD) ---
   "commons_odoo|https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/singleflo/commons_odoo"
