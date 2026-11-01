@@ -571,6 +571,14 @@ for r in q("SELECT id, partner_id FROM res_users"):  # admin/root partner mappin
     if r["id"] in IDMAP["res.users"] or resolve("res.users", r["id"], lazy=False):
         IDMAP["res.partner"].setdefault(r["partner_id"], env["res.users"].browse(IDMAP["res.users"][r["id"]]).partner_id.id)
 
+# login history: Odoo shows users without res.users.log rows as "Invited"
+for r in q("SELECT create_uid, create_date FROM res_users_log WHERE create_uid IS NOT NULL ORDER BY id"):
+    nu = IDMAP["res.users"].get(r["create_uid"])
+    if nu:
+        env.cr.execute("INSERT INTO res_users_log (create_uid, create_date, write_uid, write_date) VALUES (%s, %s, %s, %s)",
+                       [nu, r["create_date"], nu, r["create_date"]])
+env.cr.commit()
+
 # ---------------------------------------------------------------- 3. partners
 run_model("res.partner.category")
 run_model("res.partner.industry")
