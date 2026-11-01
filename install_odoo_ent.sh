@@ -2,7 +2,7 @@
 ################################################################################
 # Script for installing Odoo on Ubuntu  (could be used for other version too)
 # Author: Crottolo
-# Updated for Odoo 18.0
+# Updated for Odoo 20.0
 ################################################################################
 
 OE_USER="odoo"
@@ -14,8 +14,8 @@ INSTALL_WKHTMLTOPDF="True"
 # Set the default Odoo port (you still have to use -c /etc/odoo-server.conf for example to use this.)
 OE_PORT="8069"
 # Choose the Odoo version which you want to install. For example: 18.0, 17.0, 16.0 or 15.0. When using 'master' the master version will be installed.
-# IMPORTANT! This script contains extra libraries that are specifically needed for Odoo 18.0
-OE_VERSION="18.0"
+# IMPORTANT! This script contains extra libraries that are specifically needed for Odoo 20.0
+OE_VERSION="20.0"
 # Set this to True if you want to install the Odoo enterprise version!
 IS_ENTERPRISE="False"
 # Installs postgreSQL V16 instead of defaults (e.g V16 for Ubuntu 24.04) - this improves performance
@@ -228,8 +228,12 @@ fi
 for entry in "${REPOS[@]}"; do
   name="${entry%%|*}"
   url="${entry#*|}"
-  sudo git clone --depth 1 --branch "$OE_VERSION" "$url" "$OE_HOME/custom/$name"
-  sub_dirs+=("${OE_HOME}/custom/${name}")
+  # Repo senza branch $OE_VERSION (es. moduli Singleflo non ancora portati): salta e non aggiungere al path
+  if sudo git clone --depth 1 --branch "$OE_VERSION" "$url" "$OE_HOME/custom/$name"; then
+    sub_dirs+=("${OE_HOME}/custom/${name}")
+  else
+    echo "WARNING: $name non ha il branch $OE_VERSION, saltato"
+  fi
 done
 
 # Costruisci la stringa addons_path da sub_dirs (single source of truth)
