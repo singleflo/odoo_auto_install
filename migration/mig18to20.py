@@ -220,15 +220,21 @@ def source_spec(model, name, f):
     return None
 
 
-def specs_for(model, exclude=(), exclude_re=None):
-    key = (model, tuple(exclude), exclude_re)
+def specs_for(model, exclude=(), exclude_re=None, include_related=False):
+    key = (model, tuple(exclude), exclude_re, include_related)
     if key in SPEC_CACHE:
         return SPEC_CACHE[key]
     out = []
     for name, f in env[model]._fields.items():
         if name in MAGIC or name in exclude or (exclude_re and re.match(exclude_re, name)):
             continue
-        if not f.store or f.type in ("one2many", "properties", "properties_definition"):
+        if f.type in ("one2many", "properties", "properties_definition"):
+            continue
+        if not f.store:
+            # Odoo 20 moved some fields to another model (e.g. hr.employee -> hr.version) and kept a
+            # writable related field: copy the 18 column through it when asked
+            if include_related and f.related and not f.readonly and name in COLS.get(model.replace(".", "_"), {}):
+                out.append((name, f, ("col", name)))
             continue
         if (f.compute or f.related) and f.readonly and not f.inverse:
             continue
@@ -343,7 +349,7 @@ OPTS = {}
 def migrate_ids(model, ids, lazy_note=False):
     opts = OPTS.get(model, {})
     table = model.replace(".", "_")
-    specs = specs_for(model, opts.get("exclude", ()), opts.get("exclude_re"))
+    specs = specs_for(model, opts.get("exclude", ()), opts.get("exclude_re"), opts.get("include_related", False))
     cols = sorted({s[1] for _n, _f, s in specs if s[0] == "col"} |
                   ({"create_date", "write_date", "create_uid", "write_uid"} & set(COLS[table])) |
                   set(opts.get("extra_cols", ())) |
@@ -498,7 +504,7 @@ PLAN_MODELS = [
     "project.tags", "project.task.type", "project.project", "project.milestone", "project.task",
     "hr.department", "hr.job", "hr.employee.category", "hr.employee", "hr.skill.type", "hr.skill.level", "hr.skill",
     "hr.employee.skill", "hr.resume.line.type", "hr.resume.line",
-    "planning.role", "planning.slot.template", "planning.slot",
+    "planning.role", "planning.slot.template", "planning.recurrency", "planning.slot",
     "crm.stage", "crm.tag", "crm.lost.reason", "crm.lead",
     "sale.order.template", "sale.order.template.line", "sale.order.template.option", "sale.order", "sale.order.line",
     "purchase.order", "purchase.order.line", "sc.adhoc.sync.run", "calendar.event.type", "calendar.event",
@@ -588,6 +594,22 @@ def tmpl_vals(row, vals):
 
 run_model("product.template", fix_vals=tmpl_vals, exclude=("product_variant_ids",), ctx={"create_product_product": True})
 run_model("product.template.attribute.line")
+log("== product tracking / sale_delay")
+for r in q("SELECT id, tracking, sale_delay FROM product_template WHERE coalesce(tracking, 'none') <> 'none' OR coalesce(sale_delay, 0) <> 0"):
+    nid = IDMAP["product.template"].get(r["id"])
+    if not nid:
+        continue
+    vals = {}
+    if r["tracking"] and r["tracking"] != "none":
+        vals.update(is_storable=True, tracking=r["tracking"])
+    if r["sale_delay"]:
+        vals["sale_delay"] = r["sale_delay"]
+    try:
+        with env.cr.savepoint():
+            env["product.template"].with_context(**CTX).browse(nid).write(vals)
+    except Exception as exc:  # noqa: BLE001
+        err("product.template.tracking", r["id"], exc)
+env.cr.commit()
 
 # variants: created with their template; map them, then copy their own fields
 log("== product.product mapping")
@@ -634,7 +656,7 @@ run_model("project.tags")
 run_model("project.task.type")
 run_model("project.project", exclude=("alias_id", "account_id"))
 run_model("project.milestone")
-run_model("project.task")
+run_model("project.task", exclude=("personal_stage_type_ids", "personal_stage_type_id"))
 run_model("hr.department")
 run_model("hr.job")
 run_model("hr.employee.category")
@@ -646,9 +668,25 @@ def emp_after(pairs):
             IDMAP["resource.resource"][row["resource_id"]] = env["hr.employee"].browse(nid).resource_id.id
 
 
-run_model("hr.employee", exclude=("resource_id",), extra_cols=("resource_id",), after_batch=emp_after)
+run_model("hr.employee", exclude=("resource_id",), extra_cols=("resource_id",), after_batch=emp_after, include_related=True)
 for m in ("hr.skill.type", "hr.skill.level", "hr.skill", "hr.employee.skill", "hr.resume.line.type", "hr.resume.line",
-          "planning.role", "planning.slot.template", "planning.slot", "crm.stage", "crm.tag", "crm.lost.reason", "crm.lead",
+          "planning.role", "planning.slot.template", "planning.recurrency"):
+    run_model(m)
+
+
+def slot_vals(row, vals):
+    # 18: one resource/employee/user per shift; 20: many2many
+    for old, new, comodel in (("resource_id", "resource_ids", "resource.resource"),
+                              ("employee_id", "employee_ids", "hr.employee"), ("user_id", "user_ids", "res.users")):
+        if row.get(old) and new in env["planning.slot"]._fields:
+            n = resolve(comodel, row[old], lazy=False)
+            if n:
+                vals[new] = [(6, 0, [n])]
+
+
+run_model("planning.slot", fix_vals=slot_vals, extra_cols=tuple(
+    c for c in ("resource_id", "employee_id", "user_id") if c in COLS["planning_slot"]))
+for m in ("crm.stage", "crm.tag", "crm.lost.reason", "crm.lead",
           "sale.order.template", "sale.order.template.line", "sale.order.template.option", "sale.order", "sale.order.line",
           "purchase.order", "purchase.order.line", "sc.adhoc.sync.run", "calendar.event.type", "calendar.event"):
     run_model(m)
@@ -704,7 +742,7 @@ log("  attachments:", n_att)
 
 msg_ids = [r["id"] for r in q("SELECT id, model, res_id FROM mail_message WHERE model IS NOT NULL ORDER BY id")
            if r["model"] in env and IDMAP[r["model"]].get(r["res_id"])]
-run_model("mail.message", ids=msg_ids, exclude=("tracking_value_ids", "notification_ids", "reaction_ids"))
+run_model("mail.message", ids=msg_ids, exclude=("tracking_value_ids", "notification_ids", "reaction_ids", "notified_partner_ids"))
 fol_ids = [r["id"] for r in q("SELECT id, res_model, res_id FROM mail_followers ORDER BY id")
            if r["res_model"] in env and IDMAP[r["res_model"]].get(r["res_id"])]
 run_model("mail.followers", ids=fol_ids)
