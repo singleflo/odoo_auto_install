@@ -578,7 +578,15 @@ run_model("product.category")
 run_model("product.tag")
 run_model("product.attribute")
 run_model("product.attribute.value")
-run_model("product.template", exclude=("product_variant_ids",), ctx={"create_product_product": True})
+SELECTABLE_ROUTES = set(env["stock.route"].with_context(active_test=False).search([("product_selectable", "=", True)]).ids)
+
+
+def tmpl_vals(row, vals):
+    if "route_ids" in vals:
+        vals["route_ids"] = [(6, 0, [r for r in vals["route_ids"][0][2] if r in SELECTABLE_ROUTES])]
+
+
+run_model("product.template", fix_vals=tmpl_vals, exclude=("product_variant_ids",), ctx={"create_product_product": True})
 run_model("product.template.attribute.line")
 
 # variants: created with their template; map them, then copy their own fields
