@@ -78,6 +78,12 @@ if [ "$INSTALL_POSTGRESQL" = "True" ]; then
         echo -e "\n---- Installing the default postgreSQL version based on Linux version ----"
         sudo apt install postgresql postgresql-server-dev-all -y
     fi
+
+    # pgvector: required by the Odoo 20 "ai" module (RAG for AI agents)
+    echo -e "
+---- Installing pgvector ----"
+    PG_MAJOR=$(ls /usr/lib/postgresql | sort -V | tail -1)
+    sudo apt install "postgresql-${PG_MAJOR}-pgvector" -y
 else
     echo -e "\n---- PostgreSQL NOT installed due to the choice of the user! ----"
 fi
