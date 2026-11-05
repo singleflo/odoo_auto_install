@@ -80,8 +80,7 @@ if [ "$INSTALL_POSTGRESQL" = "True" ]; then
     fi
 
     # pgvector: required by the Odoo 20 "ai" module (RAG for AI agents)
-    echo -e "
----- Installing pgvector ----"
+    echo -e "\n---- Installing pgvector ----"
     PG_MAJOR=$(ls /usr/lib/postgresql | sort -V | tail -1)
     sudo apt install "postgresql-${PG_MAJOR}-pgvector" -y
 else
