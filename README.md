@@ -4,22 +4,22 @@
 
 ## Compatibility
 ✅ **Ubuntu 24.04 LTS** - Fully supported and optimized 
-✅ **Odoo 18.0** - Complete configuration with all necessary dependencies
+✅ **Odoo 19.0** - Complete configuration with all necessary dependencies
 ✅ **PostgreSQL 16** - Optimized installation and configuration for better performance
 
-Installation of Odoo 18.0 with Python virtual environment on Ubuntu 24.04
+Installation of Odoo 19.0 with Python virtual environment on Ubuntu 24.04
 
 ## Features and Benefits
 
 1. Python virtual environment
-2. Odoo 18.0
+2. Odoo 19.0
 3. PostgreSQL 16
 4. Ability to install multiple Odoo instances on the same server
 5. Pre-configured configuration file
 6. Support for Nginx and SSL with Certbot
 7. UFW firewall configuration
 
-Simple configuration to install Odoo 18.0 with a virtual environment on Ubuntu 24.04
+Simple configuration to install Odoo 19.0 with a virtual environment on Ubuntu 24.04
 
 Main settings:
 
@@ -33,7 +33,7 @@ OE_HOME_EXT="/$OE_USER/${OE_USER}-server"
 INSTALL_WKHTMLTOPDF="True"
 OE_PORT="8069"
 # Odoo version to install
-OE_VERSION="18.0"
+OE_VERSION="19.0"
 # Set to True to install the Odoo Enterprise version
 IS_ENTERPRISE="False"
 # Install PostgreSQL V16 instead of the default version
@@ -90,7 +90,7 @@ REPOS=(
 
 #### Singleflo Platform Repositories
 
-The 4 `*_odoo` private repos provide the cross-cutting baseline for any Singleflo Odoo 18 instance:
+The 4 `*_odoo` private repos provide the cross-cutting baseline for any Singleflo Odoo 19 instance:
 
 | Repository | Content |
 |---|---|
@@ -111,14 +111,14 @@ The 4 `*_odoo` private repos provide the cross-cutting baseline for any Singlefl
 - 2vCPU and 1GB RAM (minimum)
 - 8GB disk space
 
-This script will work on Ubuntu 24.04, uses PostgreSQL as a database, so it's advisable to run it on a server with at least 1GB of memory. No swap is required. It will install Odoo 18.0 with a Python virtual environment in the home directory of the specified system user.
+This script will work on Ubuntu 24.04, uses PostgreSQL as a database, so it's advisable to run it on a server with at least 1GB of memory. No swap is required. It will install Odoo 19.0 with a Python virtual environment in the home directory of the specified system user.
 
 ### 2. Get the script and make it executable
 
 ```sh
 # Root user is required
 
-wget https://raw.githubusercontent.com/crottolo/odoo_auto_install/refs/heads/18.0/install_odoo_ent.sh
+wget https://raw.githubusercontent.com/crottolo/odoo_auto_install/refs/heads/19.0/install_odoo_ent.sh
 chmod +x install_odoo_ent.sh
 ./install_odoo_ent.sh
 ```
@@ -233,7 +233,7 @@ If you prefer to use Nginx Proxy Manager on a separate server, here are some rec
 
 ***Websockets Support:*** true
 
-#### Configuration for Odoo 18.0
+#### Configuration for Odoo 19.0
 
 ***Custom locations: "/"***
 
@@ -286,9 +286,9 @@ wget -q -O - https://gist.githubusercontent.com/Blastoise/b74e06f739610c4a867cf9
 wget https://gist.githubusercontent.com/maxwelleite/913b6775e4e408daa904566eb375b090/raw/ttf-ms-tahoma-installer.sh -q -O - | sudo bash
 ```
 
-### 8. New Features in Version 18.0
+### 8. New Features in Version 19.0
 
-The updated script for Odoo 18.0 includes several improvements:
+The updated script for Odoo 19.0 includes several improvements:
 
 1. **Support for Ubuntu 24.04** - Optimized for the latest LTS version of Ubuntu
 2. **PostgreSQL 16** - Support for the latest version of PostgreSQL
@@ -296,10 +296,12 @@ The updated script for Odoo 18.0 includes several improvements:
 4. **UFW Configuration** - Automatic firewall configuration
 5. **Dependency Simplification** - No longer necessary to force specific versions of pyopenssl and cryptography
 6. **Configuration Improvements** - More complete and optimized configuration file
+7. **pgvector** - Installed with PostgreSQL, required by the Odoo 19 "ai" module
+8. **Missing branches skipped** - Repositories without a 19.0 branch are skipped with a warning and left out of addons_path
 
 ### 9. Conclusion
 
-You have successfully installed Odoo 18.0 with a Python virtual environment on Ubuntu 24.04. This configuration allows you to run multiple instances on the same server and offers a ready-to-use configuration for rapid deployment.
+You have successfully installed Odoo 19.0 with a Python virtual environment on Ubuntu 24.04. This configuration allows you to run multiple instances on the same server and offers a ready-to-use configuration for rapid deployment.
 
 If you found this script useful, consider giving it a "like" on its GitHub repository. For more content like this, subscribe and "like" the CrottoCode YouTube channel.
 
@@ -314,22 +316,22 @@ Your support helps create more useful content. Thank you!
 
 ## Compatibilità
 ✅ **Ubuntu 24.04 LTS** - Completamente supportato e ottimizzato 
-✅ **Odoo 18.0** - Configurazione completa con tutte le dipendenze necessarie
+✅ **Odoo 19.0** - Configurazione completa con tutte le dipendenze necessarie
 ✅ **PostgreSQL 16** - Installazione e configurazione ottimizzata per prestazioni migliori
 
-Installazione di Odoo 18.0 con ambiente virtuale su Ubuntu 24.04
+Installazione di Odoo 19.0 con ambiente virtuale su Ubuntu 24.04
 
 ## Caratteristiche e Vantaggi
 
 1. Ambiente virtuale Python
-2. Odoo 18.0
+2. Odoo 19.0
 3. PostgreSQL 16
 4. Possibilità di installare più istanze di Odoo sullo stesso server
 5. File di configurazione preimpostato
 6. Supporto per Nginx e SSL con Certbot
 7. Configurazione del firewall UFW
 
-Configurazione semplice per installare Odoo 18.0 con ambiente virtuale su Ubuntu 24.04
+Configurazione semplice per installare Odoo 19.0 con ambiente virtuale su Ubuntu 24.04
 
 Impostazioni principali:
 
@@ -343,7 +345,7 @@ OE_HOME_EXT="/$OE_USER/${OE_USER}-server"
 INSTALL_WKHTMLTOPDF="True"
 OE_PORT="8069"
 # Versione di Odoo da installare
-OE_VERSION="18.0"
+OE_VERSION="19.0"
 # Impostare su True per installare la versione enterprise di Odoo
 IS_ENTERPRISE="False"
 # Installa PostgreSQL V16 invece della versione predefinita
@@ -400,7 +402,7 @@ REPOS=(
 
 #### Repository platform Singleflo
 
-I 4 `*_odoo` privati forniscono la baseline trasversale per qualsiasi istanza Odoo 18 Singleflo:
+I 4 `*_odoo` privati forniscono la baseline trasversale per qualsiasi istanza Odoo 19 Singleflo:
 
 | Repository | Contenuto |
 |---|---|
@@ -421,14 +423,14 @@ I 4 `*_odoo` privati forniscono la baseline trasversale per qualsiasi istanza Od
 - 2vCPU e 1GB RAM (minimo)
 - 8GB di spazio su disco
 
-Questo script funzionerà su Ubuntu 24.04, utilizza PostgreSQL come database, quindi è consigliabile eseguirlo su un server con almeno 1GB di memoria. Non è necessaria la swap. Installerà Odoo 18.0 con ambiente virtuale nella directory home dell'utente di sistema specificato.
+Questo script funzionerà su Ubuntu 24.04, utilizza PostgreSQL come database, quindi è consigliabile eseguirlo su un server con almeno 1GB di memoria. Non è necessaria la swap. Installerà Odoo 19.0 con ambiente virtuale nella directory home dell'utente di sistema specificato.
 
 ### 2. Ottenere lo script e renderlo eseguibile
 
 ```sh
 # È richiesto l'utente root
 
-wget https://raw.githubusercontent.com/crottolo/odoo_auto_install/refs/heads/18.0/install_odoo_ent.sh
+wget https://raw.githubusercontent.com/crottolo/odoo_auto_install/refs/heads/19.0/install_odoo_ent.sh
 chmod +x install_odoo_ent.sh
 ./install_odoo_ent.sh
 ```
@@ -543,7 +545,7 @@ Se preferisci utilizzare Nginx Proxy Manager su un server separato, ecco alcune 
 
 ***Websockets Support:*** true
 
-#### Configurazione per Odoo 18.0
+#### Configurazione per Odoo 19.0
 
 ***Custom locations: "/"***
 
@@ -596,9 +598,9 @@ wget -q -O - https://gist.githubusercontent.com/Blastoise/b74e06f739610c4a867cf9
 wget https://gist.githubusercontent.com/maxwelleite/913b6775e4e408daa904566eb375b090/raw/ttf-ms-tahoma-installer.sh -q -O - | sudo bash
 ```
 
-### 8. Novità nella versione 18.0
+### 8. Novità nella versione 19.0
 
-La versione aggiornata dello script per Odoo 18.0 include diverse migliorie:
+La versione aggiornata dello script per Odoo 19.0 include diverse migliorie:
 
 1. **Supporto per Ubuntu 24.04** - Ottimizzato per l'ultima versione LTS di Ubuntu
 2. **PostgreSQL 16** - Supporto per la versione più recente di PostgreSQL
@@ -606,10 +608,12 @@ La versione aggiornata dello script per Odoo 18.0 include diverse migliorie:
 4. **Configurazione UFW** - Configurazione automatica del firewall
 5. **Semplificazione delle dipendenze** - Non è più necessario forzare versioni specifiche di pyopenssl e cryptography
 6. **Miglioramenti alla configurazione** - File di configurazione più completo e ottimizzato
+7. **pgvector** - Installato insieme a PostgreSQL, richiesto dal modulo "ai" di Odoo 19
+8. **Branch mancanti saltati** - I repository senza branch 19.0 vengono saltati con un avviso ed esclusi da addons_path
 
 ### 9. Conclusione
 
-Hai installato con successo Odoo 18.0 con un ambiente virtuale Python su Ubuntu 24.04. Questa configurazione ti permette di eseguire più istanze sullo stesso server e offre una configurazione pronta all'uso per una rapida implementazione.
+Hai installato con successo Odoo 19.0 con un ambiente virtuale Python su Ubuntu 24.04. Questa configurazione ti permette di eseguire più istanze sullo stesso server e offre una configurazione pronta all'uso per una rapida implementazione.
 
 Se hai trovato utile questo script, considera di dargli un "like" sul suo repository GitHub. Per altri contenuti come questo, iscriviti e metti "mi piace" al canale YouTube CrottoCode.
 

@@ -2,7 +2,7 @@
 ################################################################################
 # Script for installing Odoo on Ubuntu  (could be used for other version too)
 # Author: Crottolo
-# Updated for Odoo 18.0
+# Updated for Odoo 19.0
 ################################################################################
 
 OE_USER="odoo"
@@ -13,9 +13,9 @@ OE_HOME_EXT="/$OE_USER/${OE_USER}-server"
 INSTALL_WKHTMLTOPDF="True"
 # Set the default Odoo port (you still have to use -c /etc/odoo-server.conf for example to use this.)
 OE_PORT="8069"
-# Choose the Odoo version which you want to install. For example: 18.0, 17.0, 16.0 or 15.0. When using 'master' the master version will be installed.
-# IMPORTANT! This script contains extra libraries that are specifically needed for Odoo 18.0
-OE_VERSION="18.0"
+# Choose the Odoo version which you want to install. For example: 19.0, 18.0, 17.0 or 16.0. When using 'master' the master version will be installed.
+# IMPORTANT! This script contains extra libraries that are specifically needed for Odoo 19.0
+OE_VERSION="19.0"
 # Set this to True if you want to install the Odoo enterprise version!
 IS_ENTERPRISE="False"
 # Installs postgreSQL V16 instead of defaults (e.g V16 for Ubuntu 24.04) - this improves performance
@@ -51,7 +51,7 @@ RESEND_API_KEY="re_xxxxxxxxxxxxxxxxxxxx"
 ## === Ubuntu Trusty x64 & x32 === (for other distributions please replace these two links,
 ## in order to have correct version of wkhtmltopdf installed, for a danger note refer to
 ## https://github.com/odoo/odoo/wiki/Wkhtmltopdf ):
-## https://www.odoo.com/documentation/18.0/administration/install.html
+## https://www.odoo.com/documentation/19.0/administration/install.html
 
 #--------------------------------------------------
 # Update Server
@@ -84,6 +84,11 @@ if [ "$INSTALL_POSTGRESQL" = "True" ]; then
         echo -e "\n---- Installing the default postgreSQL version based on Linux version ----"
         sudo apt install postgresql postgresql-server-dev-all -y
     fi
+
+    # pgvector: required by the Odoo 19 "ai" module (RAG for AI agents)
+    echo -e "\n---- Installing pgvector ----"
+    PG_MAJOR=$(ls /usr/lib/postgresql | sort -V | tail -1)
+    sudo apt install "postgresql-${PG_MAJOR}-pgvector" -y
 else
     echo -e "\n---- PostgreSQL NOT installed due to the choice of the user! ----"
 fi
@@ -130,7 +135,7 @@ sudo npm install -g rtlcss
 # Install Wkhtmltopdf if needed
 #--------------------------------------------------
 if [ $INSTALL_WKHTMLTOPDF = "True" ]; then
-  echo -e "\n---- Install wkhtmltopdf and place shortcuts on correct place for ODOO 18 ----"
+  echo -e "\n---- Install wkhtmltopdf and place shortcuts on correct place for ODOO 19 ----"
   sudo wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.jammy_amd64.deb
   sudo apt install ./wkhtmltox_0.12.6.1-2.jammy_amd64.deb
   sudo cp /usr/local/bin/wkhtmltoimage /usr/bin/wkhtmltoimage
@@ -242,8 +247,12 @@ fi
 for entry in "${REPOS[@]}"; do
   name="${entry%%|*}"
   url="${entry#*|}"
-  sudo git clone --depth 1 --branch "$OE_VERSION" "$url" "$OE_HOME/custom/$name"
-  sub_dirs+=("${OE_HOME}/custom/${name}")
+  # Repo senza branch $OE_VERSION (es. moduli Singleflo non ancora portati): salta e non aggiungere al path
+  if sudo git clone --depth 1 --branch "$OE_VERSION" "$url" "$OE_HOME/custom/$name"; then
+    sub_dirs+=("${OE_HOME}/custom/${name}")
+  else
+    echo "WARNING: $name non ha il branch $OE_VERSION, saltato"
+  fi
 done
 
 # Costruisci la stringa addons_path da sub_dirs (single source of truth)
